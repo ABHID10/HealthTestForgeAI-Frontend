@@ -1,4 +1,4 @@
-# AI TestGen — Frontend (React + Vite)
+# HealthTestForgeAI — Frontend (React + Vite)
 
 This is the React + Vite frontend for AI TestGen. It provides the UI for uploading documents, running the ADK Master Agent, reviewing/ refining testcases and exporting to Jira.
 
