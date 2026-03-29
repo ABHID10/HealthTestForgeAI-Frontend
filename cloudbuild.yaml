@@ -1,0 +1,31 @@
+# In your Frontend repository -> cloudbuild.yaml
+
+steps:
+  # Build the frontend Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - 'build'
+      - '--tag=gcr.io/${PROJECT_ID}/frontend-app:$SHORT_SHA'
+      - '.' # Build context is the current directory
+
+  # Push the image to your Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/${PROJECT_ID}/frontend-app:$SHORT_SHA']
+
+  # Deploy to your 'frontend-app' service on Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'frontend-app'
+      - '--image=gcr.io/${PROJECT_ID}/frontend-app:$SHORT_SHA'
+      - '--region=us-east4'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+
+images:
+  - 'gcr.io/${PROJECT_ID}/frontend-app:$SHORT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
